@@ -2,10 +2,7 @@ package webdriver;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.How;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -13,16 +10,8 @@ import org.testng.annotations.Test;
 
 import java.util.concurrent.TimeUnit;
 
-public class Topic_Xpath_Css_Part_I {
+public class Topic_Xpath_Css_Part_II {
     WebDriver driver;
-
-    @FindBy(id = "txtFirstname-error") WebElement firstName_err;
-    @FindBy(id = "txtEmail-error") WebElement email_Error;
-    @FindBy(id = "txtCEmail-error") WebElement CEMail_Error;
-    @FindBy(id = "txtPassword-error") WebElement passWord_Error;
-    @FindBy(id = "txtCPassword-error") WebElement cPassword_Error;
-    @FindBy(id = "txtCPassword-error") WebElement phone_Error;
-
 
     @BeforeClass
     public void setup_open(){
@@ -36,12 +25,12 @@ public class Topic_Xpath_Css_Part_I {
     public void TC_01_Register_Empty_Data(){
         driver.get("https://alada.vn/tai-khoan/dang-ky.html");
         driver.findElement(By.xpath("//button[@type='submit']")).click();
-        Assert.assertEquals(firstName_err.getText(),"Vui lòng nhập họ tên");
-        Assert.assertEquals(email_Error.getText(),"Vui lòng nhập email");
-        Assert.assertEquals(CEMail_Error.getText(),"Vui lòng nhập lại địa chỉ email");
-        Assert.assertEquals(passWord_Error.getText(),"Vui lòng nhập mật khẩu");
-        Assert.assertEquals(cPassword_Error.getText(),"Vui lòng nhập lại mật khẩu");
-        Assert.assertEquals(phone_Error.getText(),"Vui lòng nhập số điện thoại.");
+        Assert.assertEquals(driver.findElement(By.id("txtFirstname-error")).getText(),"Vui lòng nhập họ tên");
+        Assert.assertEquals(driver.findElement(By.id("txtEmail-error")).getText(),"Vui lòng nhập email");
+        Assert.assertEquals(driver.findElement(By.id("txtCEmail-error")).getText(),"Vui lòng nhập lại địa chỉ email");
+        Assert.assertEquals(driver.findElement(By.id("txtPassword-error")).getText(),"Vui lòng nhập mật khẩu");
+        Assert.assertEquals(driver.findElement(By.id("txtCPassword-error")).getText(),"Vui lòng nhập lại mật khẩu");
+        Assert.assertEquals(driver.findElement(By.id("txtPhone-error")).getText(),"Vui lòng nhập số điện thoại.");
     }
 
     @Test
