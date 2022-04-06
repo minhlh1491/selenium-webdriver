@@ -1,11 +1,9 @@
 package webdriver;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptException;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -26,6 +24,8 @@ public class Topic_09_Button_Radio_Checkbox_Alert {
     String messPassword = "//input[@id='login_password']/ancestor::div/following-sibling::div[@class='fhs-input-alert']";
     String petrolCheckbox147 = "//input[@id='engine3']";
     JavascriptExecutor jsExecutor;
+    WebDriverWait explicitwait;
+    Alert alert;
 
     @BeforeClass
     public void setup_open() {
@@ -33,6 +33,9 @@ public class Topic_09_Button_Radio_Checkbox_Alert {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         jsExecutor = (JavascriptExecutor) driver;
+
+        explicitwait = new WebDriverWait(driver,20);
+        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
 
     @AfterClass
@@ -152,13 +155,16 @@ public class Topic_09_Button_Radio_Checkbox_Alert {
     public void TC_05_Accept_Alert(){
         driver.get("https://automationfc.github.io/basic-form/index.html");
         By jsAlert = By.xpath("//button[contains(text(),'Click for JS Alert')]");
+
         driver.findElement(jsAlert).click();
-        driver.switchTo().alert().accept();
+
+        alert = explicitwait.until(ExpectedConditions.alertIsPresent());
+
+        Assert.assertEquals(alert.getText(),"I am a JS Alert");
 
         Assert.assertEquals(driver.findElement(By.xpath("//p[@id='result']")).getText(),"You clicked an alert successfully");
     }
 
-    @Test
     public void TC_06_Confirm_Alert(){
         driver.get("https://automationfc.github.io/basic-form/index.html");
         By jsConfirm = By.xpath("//button[contains(text(),'Click for JS Confirm')]");
@@ -168,6 +174,27 @@ public class Topic_09_Button_Radio_Checkbox_Alert {
 
         driver.switchTo().alert().dismiss();
         Assert.assertEquals(driver.findElement(By.xpath("//p[@id='result']")).getText(),"You clicked: Cancel");
+    }
+
+    public void TC_07_Prompt_Alert(){
+        driver.get("https://automationfc.github.io/basic-form/index.html");
+        String message = "minhlh";
+        By acceptMessage = By.xpath("//p[@id='result']");
+
+        By jsPrompt = By.xpath("//button[contains(text(),'Click for JS Prompt')]");
+
+        driver.findElement(jsPrompt).click();
+        Assert.assertEquals(driver.switchTo().alert().getText(),"I am a JS prompt");
+
+
+        driver.switchTo().alert().sendKeys(message);
+        driver.switchTo().alert().accept();
+
+        Assert.assertEquals(driver.findElement(acceptMessage).getText(),"You entered: "+message);
+    }
+
+    public void TC_08_Authentication_Alert_link(){
+        driver.get("http://admin:admin@the-internet.herokuapp.com/basic_auth");
     }
 
     public void sleepSecond(long second){
