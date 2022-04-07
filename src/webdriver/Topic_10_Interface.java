@@ -27,7 +27,6 @@ public class Topic_10_Interface {
         driver.manage().window().maximize();
         jsExecutor = (JavascriptExecutor) driver;
         action = new Actions (driver);
-
         explicitwait = new WebDriverWait(driver,20);
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
@@ -37,6 +36,13 @@ public class Topic_10_Interface {
 //        driver.quit();
     }
 
+    public void sleepSecond(long second){
+        try{
+            Thread.sleep(second * 1000);
+        } catch (InterruptedException e){
+            e.printStackTrace();
+        }
+    }
 
     public void TC_01_Hover_elements_tooltip(){
         driver.get("https://automationfc.github.io/jquery-tooltip/");
@@ -48,17 +54,33 @@ public class Topic_10_Interface {
         Assert.assertTrue(tooltip.isDisplayed());
     }
 
-    public void TC_02_Hover_elements(){
+    public void TC_02_Hover_elements_01(){
         driver.get("https://www.myntra.com/");
-
         WebElement eleKIDs = driver.findElement(By.xpath("//a[@data-group='kids']"));
-        WebElement eleTOPS = driver.findElement(By.xpath("//a[@data-group='kids']"));
+        WebElement eleHomebath = driver.findElement(By.xpath("//a[contains(text(),'Home & Bath')]"));
 
         action.moveToElement(eleKIDs).perform();
-        eleTOPS.click();
+        eleHomebath.click();
+        Assert.assertTrue(driver.findElement(By.xpath("//span[@class='breadcrumbs-crumb']")).getText().contains("Home Bath"));
+    }
 
+    public void TC_02_Hover_elements_02(){
+        driver.get("https://www.fahasa.com/");
+        sleepSecond(3);
 
+        driver.switchTo().frame("preview-notification-frame");
 
+        WebElement adsEle= driver.findElement(By.xpath("//img[@id='NC_IMAGE1']"));
+        adsEle.click();
+        driver.switchTo().parentFrame();
+
+        WebElement eleMenu = driver.findElement(By.xpath("//span[@class='icon_menu']"));
+        action.moveToElement(eleMenu).perform();
+
+        WebElement eleToys = driver.findElement(By.xpath("//a[@title='Đồ Chơi']//span"));
+        action.moveToElement(eleToys).perform();
+
+        Assert.assertTrue(driver.findElement(By.xpath("//div[@class='fhs_column_stretch']//span[contains(text(),'Đồ Chơi')]")).isDisplayed());
     }
 
 }
